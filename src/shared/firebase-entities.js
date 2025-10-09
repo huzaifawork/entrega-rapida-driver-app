@@ -145,6 +145,11 @@ export const User = {
     return { id: user.uid, ...userDoc.data() };
   },
   
+  logout: async () => {
+    const { signOut } = await import('firebase/auth');
+    await signOut(auth);
+  },
+  
   updateMyUserData: async (data) => {
     const user = auth.currentUser;
     if (!user) throw new Error('Not authenticated');
