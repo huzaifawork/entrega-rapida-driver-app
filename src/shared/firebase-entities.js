@@ -130,7 +130,7 @@ export const syncDeliveryToOrder = async (deliveryId, status) => {
   if (deliveryDoc.exists()) {
     const orderId = deliveryDoc.data().order_id;
     if (orderId) {
-      await Order.update(orderId, { delivery_status: status });
+      await Order.update(orderId, { status: status, delivery_status: status });
     }
   }
 };
