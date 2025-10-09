@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { firebaseAuth } from '@shared/firebase-auth.js';
+import { firebaseAuth } from '@/shared/firebase-auth.js';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

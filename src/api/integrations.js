@@ -1,4 +1,4 @@
-import { storage } from '@shared/firebase-config.js';
+import { storage } from '@/shared/firebase-config.js';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 export const UploadFile = async ({ file }) => {

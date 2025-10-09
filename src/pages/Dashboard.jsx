@@ -313,7 +313,7 @@ export default function Dashboard() {
       });
 
       // Sync status back to order
-      const { syncDeliveryToOrder } = await import('@shared/firebase-entities.js');
+      const { syncDeliveryToOrder } = await import('@/shared/firebase-entities.js');
       await syncDeliveryToOrder(delivery.id, 'accepted');
 
       setActiveDelivery({ ...delivery, status: "accepted", driver_id: user.id, vehicle_id: compatibleVehicle.id });
@@ -347,7 +347,7 @@ export default function Dashboard() {
       await Delivery.update(deliveryId, updateData);
 
       // Sync status back to order
-      const { syncDeliveryToOrder } = await import('@shared/firebase-entities.js');
+      const { syncDeliveryToOrder } = await import('@/shared/firebase-entities.js');
       await syncDeliveryToOrder(deliveryId, newStatus);
 
       if (newStatus === "delivered") {

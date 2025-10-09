@@ -1,4 +1,4 @@
-import { acceptDeliveryAndSyncOrder, updateDeliveryStatusAndSync } from '@shared/cross-app-sync.js';
+import { acceptDeliveryAndSyncOrder, updateDeliveryStatusAndSync } from '@/shared/cross-app-sync.js';
 
 export const webhook = async (data) => {
   return { success: true };
