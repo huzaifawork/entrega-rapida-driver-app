@@ -2,7 +2,6 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { CreditCard, Smartphone, Bitcoin, Ticket, Fuel } from "lucide-react";
 
@@ -59,35 +58,36 @@ export default function PaymentSettings({ user, editedData, setEditedData }) {
           {paymentPreference === 'payout' && (
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="payment_method">Escolha o Método de Pagamento</Label>
-                <Select
-                  value={paymentMethod}
-                  onValueChange={(value) => handleFieldChange('payment_method', value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecionar método" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="bank_transfer">
-                      <div className="flex items-center gap-2">
-                        <CreditCard className="w-4 h-4" />
-                        Transferência Bancária (IBAN)
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="mbway">
-                      <div className="flex items-center gap-2">
-                        <Smartphone className="w-4 h-4" />
-                        MBWay
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="bitcoin">
-                      <div className="flex items-center gap-2">
-                        <Bitcoin className="w-4 h-4" />
-                        Bitcoin
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <Label>Escolha o Método de Pagamento</Label>
+                <div className="grid grid-cols-3 gap-2">
+                  <Button
+                    type="button"
+                    variant={paymentMethod === 'bank_transfer' ? 'default' : 'outline'}
+                    onClick={() => handleFieldChange('payment_method', 'bank_transfer')}
+                    className="flex flex-col items-center gap-1 h-auto py-3"
+                  >
+                    <CreditCard className="w-5 h-5" />
+                    <span className="text-xs">IBAN</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={paymentMethod === 'mbway' ? 'default' : 'outline'}
+                    onClick={() => handleFieldChange('payment_method', 'mbway')}
+                    className="flex flex-col items-center gap-1 h-auto py-3"
+                  >
+                    <Smartphone className="w-5 h-5" />
+                    <span className="text-xs">MBWay</span>
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={paymentMethod === 'bitcoin' ? 'default' : 'outline'}
+                    onClick={() => handleFieldChange('payment_method', 'bitcoin')}
+                    className="flex flex-col items-center gap-1 h-auto py-3"
+                  >
+                    <Bitcoin className="w-5 h-5" />
+                    <span className="text-xs">Bitcoin</span>
+                  </Button>
+                </div>
               </div>
 
               {paymentMethod === "bank_transfer" && (
@@ -192,12 +192,12 @@ export default function PaymentSettings({ user, editedData, setEditedData }) {
             <h4 className="font-medium text-gray-700 mb-2">Saldo Atual</h4>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-sm text-gray-500">Pendente</p>
-                <p className="text-xl font-bold text-orange-600">€{user?.pending_balance?.toFixed(2) || "0.00"}</p>
+                <p className="text-sm text-gray-500">Esta Semana</p>
+                <p className="text-xl font-bold text-orange-600">€{user?.earnings_week?.toFixed(2) || "0.00"}</p>
               </div>
               <div>
-                <p className="text-sm text-gray-500">Total Ganho</p>
-                <p className="text-xl font-bold text-green-600">€{user?.total_earned?.toFixed(2) || "0.00"}</p>
+                <p className="text-sm text-gray-500">Total Entregas</p>
+                <p className="text-xl font-bold text-green-600">{user?.total_deliveries || 0}</p>
               </div>
             </div>
           </div>

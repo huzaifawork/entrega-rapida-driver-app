@@ -1,46 +1,78 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Filter, Calendar, CheckCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Calendar, CheckCircle } from "lucide-react";
 
 export default function HistoryFilters({ filters, onFiltersChange }) {
   return (
     <Card className="shadow-lg border-0">
       <CardContent className="p-4">
         <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex items-center gap-2 flex-1">
-            <Calendar className="w-4 h-4 text-gray-500" />
-            <Select
-              value={filters.period}
-              onValueChange={(value) => onFiltersChange({...filters, period: value})}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Período" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Períodos</SelectItem>
-                <SelectItem value="today">Hoje</SelectItem>
-                <SelectItem value="week">Última Semana</SelectItem>
-                <SelectItem value="month">Último Mês</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex-1">
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <Calendar className="w-4 h-4" />
+              Período
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={filters.period === "today" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, period: "today"})}
+              >
+                Hoje
+              </Button>
+              <Button
+                variant={filters.period === "week" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, period: "week"})}
+              >
+                Última Semana
+              </Button>
+              <Button
+                variant={filters.period === "month" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, period: "month"})}
+              >
+                Último Mês
+              </Button>
+              <Button
+                variant={filters.period === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, period: "all"})}
+              >
+                Todos
+              </Button>
+            </div>
           </div>
 
-          <div className="flex items-center gap-2 flex-1">
-            <CheckCircle className="w-4 h-4 text-gray-500" />
-            <Select
-              value={filters.status}
-              onValueChange={(value) => onFiltersChange({...filters, status: value})}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos os Status</SelectItem>
-                <SelectItem value="delivered">Entregue</SelectItem>
-                <SelectItem value="cancelled">Cancelada</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex-1">
+            <p className="text-sm text-gray-500 mb-2 flex items-center gap-2">
+              <CheckCircle className="w-4 h-4" />
+              Status
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                variant={filters.status === "delivered" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, status: "delivered"})}
+              >
+                Entregue
+              </Button>
+              <Button
+                variant={filters.status === "cancelled" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, status: "cancelled"})}
+              >
+                Cancelada
+              </Button>
+              <Button
+                variant={filters.status === "all" ? "default" : "outline"}
+                size="sm"
+                onClick={() => onFiltersChange({...filters, status: "all"})}
+              >
+                Todos
+              </Button>
+            </div>
           </div>
         </div>
       </CardContent>

@@ -171,43 +171,33 @@ export default function Dashboard() {
       const allDriverDeliveries = await Delivery.filter({ driver_id: userData.id }, "-created_date");
       const completedDeliveries = allDriverDeliveries.filter(d => d.status === "delivered");
       
-      console.log('Completed deliveries:', completedDeliveries.length);
-      console.log('Delivery fees:', completedDeliveries.map(d => d.delivery_fee));
-      
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const weekAgo = new Date(today);
       weekAgo.setDate(weekAgo.getDate() - 7);
       
       const todayEarnings = completedDeliveries
-        .filter(d => new Date(d.delivery_time || d.created_date) >= today)
-        .reduce((sum, d) => sum + (d.delivery_fee || 0), 0);
+        .filter(d => {
+          const date = d.delivery_time?.toDate ? d.delivery_time.toDate() : 
+                      d.created_date?.toDate ? d.created_date.toDate() : 
+                      new Date(d.delivery_time || d.created_date);
+          return date >= today;
+        })
+        .reduce((sum, d) => sum + (d.delivery_fee || 7.50), 0);
       
       const weekEarnings = completedDeliveries
-        .filter(d => new Date(d.delivery_time || d.created_date) >= weekAgo)
-        .reduce((sum, d) => sum + (d.delivery_fee || 0), 0);
-      
-      console.log('Today earnings:', todayEarnings, 'Week earnings:', weekEarnings);
-      
-      // Update user stats with fallback to 7.50 if no delivery_fee
-      const todayEarningsWithFallback = completedDeliveries
-        .filter(d => new Date(d.delivery_time || d.created_date) >= today)
+        .filter(d => {
+          const date = d.delivery_time?.toDate ? d.delivery_time.toDate() : 
+                      d.created_date?.toDate ? d.created_date.toDate() : 
+                      new Date(d.delivery_time || d.created_date);
+          return date >= weekAgo;
+        })
         .reduce((sum, d) => sum + (d.delivery_fee || 7.50), 0);
-      
-      const weekEarningsWithFallback = completedDeliveries
-        .filter(d => new Date(d.delivery_time || d.created_date) >= weekAgo)
-        .reduce((sum, d) => sum + (d.delivery_fee || 7.50), 0);
-      
-      console.log('Setting user stats:', {
-        earnings_today: todayEarningsWithFallback,
-        earnings_week: weekEarningsWithFallback,
-        total_deliveries: completedDeliveries.length
-      });
       
       setUser(prev => ({
         ...prev,
-        earnings_today: todayEarningsWithFallback,
-        earnings_week: weekEarningsWithFallback,
+        earnings_today: todayEarnings,
+        earnings_week: weekEarnings,
         total_deliveries: completedDeliveries.length,
         rating: prev?.rating || 5.0
       }));

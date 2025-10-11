@@ -228,19 +228,20 @@ export default function WarehouseManager({ user }) {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="warehouse_type">Tipo</Label>
-                        <Select
-                          value={formData.warehouse_type}
-                          onValueChange={(value) => setFormData(prev => ({...prev, warehouse_type: value}))}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Object.entries(warehouseTypeLabels).map(([key, label]) => (
-                              <SelectItem key={key} value={key}>{label}</SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
+                        <div className="flex gap-2">
+                          {Object.entries(warehouseTypeLabels).map(([key, label]) => (
+                            <Button
+                              key={key}
+                              type="button"
+                              variant={formData.warehouse_type === key ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => setFormData(prev => ({...prev, warehouse_type: key}))}
+                              className="flex-1"
+                            >
+                              {label}
+                            </Button>
+                          ))}
+                        </div>
                       </div>
                     </div>
 

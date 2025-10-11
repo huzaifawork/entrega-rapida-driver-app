@@ -195,11 +195,9 @@ Responda de forma simples e objetiva.`,
       }
 
     } catch (error) {
-      console.error("Erro na análise de conformidade:", error);
-      setComplianceStatus({
-        is_compliant: false,
-        compliance_score: 0
-      });
+      console.error("Erro na análise de conformidade (opcional):", error);
+      // Silently fail - compliance analysis is optional
+      setComplianceStatus(null);
     } finally {
       setIsAnalyzing(false);
     }
@@ -209,16 +207,15 @@ Responda de forma simples e objetiva.`,
     loadVehicles();
   }, [loadVehicles]);
 
-  useEffect(() => {
-    if (user && vehicles.length >= 0) {
-      // Aguardar um pouco antes de analisar
-      const timer = setTimeout(() => {
-        runComplianceAnalysis();
-      }, 1000);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [user, vehicles.length, runComplianceAnalysis]);
+  // Compliance analysis is optional - only run if explicitly triggered
+  // useEffect(() => {
+  //   if (user && vehicles.length >= 0) {
+  //     const timer = setTimeout(() => {
+  //       runComplianceAnalysis();
+  //     }, 1000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [user, vehicles.length, runComplianceAnalysis]);
 
   const documentsToManage = [
     { type: "id_front", label: "Cartão de Cidadão (Frente)", hasExpiry: false, allowPhoto: true },
@@ -229,21 +226,18 @@ Responda de forma simples e objetiva.`,
 
   return (
     <div className="space-y-6">
-      {/* Status de Conformidade - Análise Automática */}
-      <Card className="shadow-lg border-0">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Shield className="w-5 h-5 text-blue-600" />
-              Status de Conformidade
-            </div>
-            {isAnalyzing && (
-              <div className="animate-spin w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {complianceStatus ? (
+      {/* Status de Conformidade - Análise Opcional */}
+      {complianceStatus && (
+        <Card className="shadow-lg border-0">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-blue-600" />
+                Status de Conformidade
+              </div>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 {complianceStatus.is_compliant ? (
@@ -269,17 +263,9 @@ Responda de forma simples e objetiva.`,
                 <p className="text-xs text-gray-500">Score de Conformidade</p>
               </div>
             </div>
-          ) : (
-            <div className="flex items-center gap-3">
-              <Shield className="w-8 h-8 text-gray-400" />
-              <div>
-                <p className="font-medium text-gray-600">A verificar documentação...</p>
-                <p className="text-sm text-gray-500">Verificação automática em curso</p>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
 
       <Card className="shadow-lg border-0">
         <CardHeader>

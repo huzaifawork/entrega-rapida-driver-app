@@ -177,7 +177,6 @@ export default function VehicleForm({ vehicle, onSubmit, onCancel, warehouses })
                       <SelectValue placeholder="Associar a um armazém..." />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value={null}>Nenhum</SelectItem>
                       {warehouses && warehouses.map((wh) => (
                         <SelectItem key={wh.id} value={wh.id}>
                           <div className="flex items-center gap-2">

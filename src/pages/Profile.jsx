@@ -6,6 +6,7 @@ import { Save, Loader2, AlertCircle, Star, Package, Euro, Award, Target, Bell, M
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 import PersonalInfo from "../components/profile/PersonalInfo";
 import DocumentUpload from "../components/profile/DocumentUpload";
@@ -13,6 +14,7 @@ import PaymentSettings from "../components/profile/PaymentSettings";
 import WarehouseManager from "../components/profile/WarehouseManager";
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [vehicles, setVehicles] = useState([]);
   const [editedData, setEditedData] = useState({});
@@ -22,9 +24,30 @@ export default function Profile() {
 
   const loadUser = useCallback(async () => {
     try {
+      const { Delivery } = await import('@/api/entities');
       const userData = await User.me();
-      setUser(userData);
-      setEditedData(userData || {});
+      
+      // Calculate earnings
+      const allDriverDeliveries = await Delivery.filter({ driver_id: userData.id }, "-created_date");
+      const completedDeliveries = allDriverDeliveries.filter(d => d.status === "delivered");
+      
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const weekAgo = new Date(today);
+      weekAgo.setDate(weekAgo.getDate() - 7);
+      
+      const weekEarnings = completedDeliveries
+        .filter(d => new Date(d.delivery_time || d.created_date) >= weekAgo)
+        .reduce((sum, d) => sum + (d.delivery_fee || 7.50), 0);
+      
+      const userWithStats = {
+        ...userData,
+        earnings_week: weekEarnings,
+        total_deliveries: completedDeliveries.length
+      };
+      
+      setUser(userWithStats);
+      setEditedData(userWithStats || {});
 
       // Carregar veículos para análise de conformidade
       const userVehicles = await Vehicle.filter({ owner_id: userData.id }, "-created_date");
@@ -75,7 +98,7 @@ export default function Profile() {
   const handleLogout = async () => {
     try {
       await User.logout();
-      window.location.reload();
+      navigate('/Login');
     } catch (error) {
       console.error("Erro ao fazer logout:", error);
     }

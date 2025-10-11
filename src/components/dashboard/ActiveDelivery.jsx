@@ -312,7 +312,7 @@ export default function ActiveDelivery({ delivery, onStatusUpdate, selectedVehic
 
             <div className="text-center text-sm text-gray-500 pt-2">
               <Clock className="w-4 h-4 inline mr-1" />
-              Entrega iniciada às {new Date(delivery.created_date).toLocaleTimeString()}
+              Entrega iniciada às {delivery.created_date?.toDate ? delivery.created_date.toDate().toLocaleTimeString('pt-PT') : new Date(delivery.created_date).toLocaleTimeString('pt-PT')}
             </div>
           </div>
         </CardContent>

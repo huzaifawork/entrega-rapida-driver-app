@@ -66,9 +66,11 @@ export default function VehicleCard({ vehicle, index, onEdit, onToggleActive, on
               <p className="text-sm text-gray-500">
                 {vehicleTypeLabels[vehicle.vehicle_type]}
               </p>
-              <p className="text-sm text-gray-600">
-                {vehicle.brand} {vehicle.model} ({vehicle.year})
-              </p>
+              {(vehicle.brand || vehicle.model || vehicle.year) && (
+                <p className="text-sm text-gray-600">
+                  {vehicle.brand} {vehicle.model} {vehicle.year && `(${vehicle.year})`}
+                </p>
+              )}
             </div>
             <div className="flex flex-col gap-2">
               {isVehicleValid() ? (
@@ -106,11 +108,11 @@ export default function VehicleCard({ vehicle, index, onEdit, onToggleActive, on
           <div className="grid grid-cols-2 gap-3 text-sm">
             <div className="flex items-center gap-2">
               <Weight className="w-4 h-4 text-gray-500" />
-              <span>{vehicle.max_weight_kg}kg</span>
+              <span>{vehicle.max_weight_kg || 0}kg</span>
             </div>
             <div className="flex items-center gap-2">
               <Ruler className="w-4 h-4 text-gray-500" />
-              <span>{vehicle.cargo_length_m}x{vehicle.cargo_width_m}x{vehicle.cargo_height_m}m</span>
+              <span>{vehicle.cargo_length_m || 0}x{vehicle.cargo_width_m || 0}x{vehicle.cargo_height_m || 0}m</span>
             </div>
           </div>
 
@@ -146,7 +148,7 @@ export default function VehicleCard({ vehicle, index, onEdit, onToggleActive, on
             {vehicle.has_crane && (
               <Badge className="bg-blue-100 text-blue-800">
                 <Construction className="w-3 h-3 mr-1" />
-                Grua {vehicle.crane_reach_m}m
+                Grua {vehicle.crane_reach_m || 0}m
               </Badge>
             )}
             {vehicle.has_tipper && (
@@ -209,24 +211,15 @@ export default function VehicleCard({ vehicle, index, onEdit, onToggleActive, on
           </div>
 
           {/* Ações */}
-          <div className="grid grid-cols-2 gap-2 pt-2">
+          <div className="pt-2">
             <Button
               variant="outline"
               size="sm"
               onClick={() => onEdit(vehicle)}
-              className="flex-1"
+              className="w-full"
             >
               <Edit className="w-4 h-4 mr-2" />
               Editar
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => onViewAnalytics(vehicle)}
-              className="flex-1"
-            >
-              <BarChart3 className="w-4 h-4 mr-2" />
-              Análise
             </Button>
           </div>
           

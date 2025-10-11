@@ -31,10 +31,10 @@ export default function VehicleAnalytics({ vehicle }) {
       }, "-delivery_time", 100);
 
       const recentDeliveries = deliveries.filter(d => 
-        new Date(d.delivery_time) >= thirtyDaysAgo
+        new Date(d.delivery_time || d.created_date) >= thirtyDaysAgo
       );
 
-      const totalRevenue = recentDeliveries.reduce((sum, d) => sum + (d.delivery_fee || 0), 0);
+      const totalRevenue = recentDeliveries.reduce((sum, d) => sum + (d.delivery_fee || 7.50), 0);
       const totalDistance = recentDeliveries.reduce((sum, d) => sum + (d.distance_km || 0), 0);
       
       // Calcular custos detalhados
